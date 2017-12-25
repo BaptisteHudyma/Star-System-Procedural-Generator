@@ -1,3 +1,6 @@
+//planet creation file
+//all the planet creation and display functions
+
 #include <iostream>
 #include <stdio.h>
 #include <string>
@@ -351,8 +354,8 @@ void OrderPlanetsByDistance(vector<Planet> *StarSystem)
 void DisplayAsteroidBelt(AsteroidBelt ABelt)
 {
   printf("\n\n--------------------------    -  %.3f AU", ABelt.getInnerEdge());
-    printf("\n . °   o   ,    '     q  ,    |");
-    printf("\n    `        .    °    .      |  %.3f AU width", ABelt.getWidth());
+    printf("\n . Â°   o   ,    '     q  ,    |");
+    printf("\n    `        .    Â°    .      |  %.3f AU width", ABelt.getWidth());
     printf("\n .    '   O     '             |");
     printf("\n--------------------------    -  %.3f AU\n", ABelt.getOuterEdge());
 }
