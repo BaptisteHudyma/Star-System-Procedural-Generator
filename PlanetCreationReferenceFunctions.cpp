@@ -389,7 +389,7 @@ void Planet::DisplayPlanet(float StarMass)
         else
             printf("\n\nPOSSIBLE HABITABLE YOUHOUUUUU\n");
     }
-    cout << "\n\n" << endl;
+    cout << "\n\n" << endl; 
 }
 
 
