@@ -29,15 +29,7 @@ unsigned int InputSeed();
 //6984  Habitable moon 700
 
 int main(){
-    //unsigned int Seed = InputSeed(); srand(Seed);
-    unsigned int Rand = time(NULL)%120000;
-    /*srand(Rand);
-    Rand = rand()%150;
-    for(unsigned int i=0; i<Rand; i++)
-        rand();
-
-    Rand = rand()%20000;*/
-    srand(Rand);
+    unsigned int Seed = InputSeed(); srand(Seed);
     //srand(27817);
 
 
@@ -45,7 +37,7 @@ int main(){
     //srand(27198); //11185     //54432
     //srand(8854);         //(32210);   //17053
     //80808;
-    //876 <--> 906 spe
+    //876 <--> 906 special stars
 
     //srand(17026); //204444    //20437
     //srand(6898);
@@ -53,17 +45,15 @@ int main(){
     Star NS;
     int multipleStars = RandomInt(0, 20);
 
-    //multipleStars = 2;
-
-    if(multipleStars <= 3)
+    if(multipleStars <= 3)  //  prob 4/21 (reality is ~1/5)
     {
         CreateMultipleStarSystem(&NS);
-        DisplayDoubleStar(NS, false);   //put the value tu true and every planet characteristics get display
+        DisplayDoubleStar(NS, false);   //put the value to true and every planet characteristics get display
     }
-    else
+    else    //simple star system
     {
-        CreateStar(&NS);
-        PopulatePlanets(&NS);
+        CreateStar(&NS);        //create a star
+        PopulatePlanets(&NS);   //add planets to a star
         DisplayStarCarac(NS);
 
         cout << "\n\n" << endl;
@@ -108,7 +98,9 @@ unsigned int InputSeed()
 }
 
 
-/*
+/*  //will be used to get a precise RGB color of the star from which wavelength it radiates
+    //not my function
+
 int* waveLengthToRGB(double Wavelength){
     double factor;
     double Red,Green,Blue;
