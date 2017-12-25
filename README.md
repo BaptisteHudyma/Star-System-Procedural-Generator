@@ -1,5 +1,5 @@
 # Star-System-Procedural-Generator
-Proceduraly generate a star system from a seed
+Proceduraly generate a star system from a seed in C++
 I love studying the universe by the maths and so after some long research, I decided to use all my stuff to create a realistic star system generator.
 
 The probabilities in this program are quite close to reality, or at least what we now of universe yet.
