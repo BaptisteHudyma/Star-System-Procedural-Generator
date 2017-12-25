@@ -1,3 +1,6 @@
+//The bigger function used for the setting of planets in the planet class
+
+
 #include "Classes.h"
 #include "PlanetFunctions.h"
 #include <stdio.h>
