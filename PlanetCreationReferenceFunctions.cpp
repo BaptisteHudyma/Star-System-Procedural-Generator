@@ -22,7 +22,7 @@ float CompositionCoeff [10][2] = {  //constants to calculate mass radius approxi
 };
 
 float ProbaRockyCompos[3][10] = {   //probability of composition apparition of rocky planets
-  //F                   R          W  H
+  //Iron              Rock   Water | Hydrogen
    {2, 10, 17, 22, 22, 17,  8,  1, 0, 0},
    {1, 11, 15, 30, 15,  7,  9,  7, 5, 0},
    {0,  4, 11, 14, 15, 17, 17, 13, 9, 0}
