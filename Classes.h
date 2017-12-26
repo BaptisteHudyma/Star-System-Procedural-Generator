@@ -137,9 +137,7 @@ public :
 
     float getHillSphereLimit(float PrimaryMass)
     {
-        if(HillSphere <= 0.0 || HillSphere > 1000)
-            HillSphere = SemiMajor * (1-eccentricity) * pow( (Mass/332946.0487) / (2*PrimaryMass) , 1.0/3.0 );
-        return HillSphere;
+        return HillSphere = (float)SemiMajor * (1-eccentricity) * pow( ( ((float)Mass)/332946.0487) / (3*PrimaryMass) , 1.0/3.0 );
     };
     int getPlanetType() {return PlanetType;};
     float getEscapeVelocity() { return sqrt(Gravity*Radius)*11.2; };    //in km/s
