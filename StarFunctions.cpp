@@ -178,6 +178,12 @@ void CreateMultipleStarSystem( Star *CenterOfMass)
         {
             Companion1.OuterEdge = Companion1.getHillSphere(Companion2.getMass());
             Companion2.OuterEdge = Companion2.getHillSphere(Companion1.getMass());
+            if(Companion1.OuterEdge < Companion2.OuterEdge)
+            {
+                float tempo = Companion1.OuterEdge;
+                Companion1.OuterEdge = Companion2.OuterEdge;
+                Companion2.OuterEdge = tempo;
+            }
             PopulatePlanets(&Companion1);
             PopulatePlanets(&Companion2);
         }
@@ -370,7 +376,7 @@ void DisplayDoubleStar(Star DoubleStarCenter, bool DispPlanetCharac)
 
 
 
-float getStarLuminosity(int StarType, int StarClass)    //correction à donner
+float getStarLuminosity(int StarType, int StarClass)    //correction Ã  donner
 {   //get some random luminosity
     if(StarType == D)
     {
