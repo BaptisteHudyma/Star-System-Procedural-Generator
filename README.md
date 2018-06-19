@@ -6,3 +6,5 @@ The probabilities in this program are quite close to reality, or at least what w
 Also certain probabilities are changed to add probable but not confirmed star types, like black dwarf (that will probably exist in some million years or so)
 
 This program is a work in progress so some bugs can happend, specially for double star systems with giant stars.
+
+This is the main component of a 3D procedural physic based universe engine
