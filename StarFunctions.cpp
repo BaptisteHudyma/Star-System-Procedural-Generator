@@ -275,7 +275,7 @@ void CreateStar(Star *NewStar)
         NewStar->setClass(SpeStar[ChooseStar]);
 
         NewStar->setMass( RandomFloat(StarMass[ChooseStar][0], StarMass[ChooseStar][1]) );
-        NewStar->setTemperature( RandomFloat(StarTemp[ChooseStar][1], StarTemp[ChooseStar][1]) );
+        NewStar->setTemperature( RandomFloat(StarTemp[ChooseStar][0], StarTemp[ChooseStar][1]) );
         NewStar->setRadius( RandomFloat( StarRadi[ChooseStar][0], StarRadi[ChooseStar][1] ) );
         NewStar->setLuminosity( RandomFloat( StarLum[ChooseStar][0], StarLum[ChooseStar][1] ) );
         NewStar->setDensity((float) NewStar->getMass()/(pow(NewStar->getRadius()*SUN_RADIUS_KM, 3.0) / pow(SUN_RADIUS_KM, 3.0)));
@@ -324,7 +324,7 @@ void DisplayStarCarac(Star NS)
             printf("%s %s\n", StarDeterTypeColor[NS.getTypeInt()].c_str(), StarDeterClass[NS.getClassInt()].c_str() );
     }
 
-    printf("Temperature : %.0f K\nRadius : %.5f AU (%.3f sun percent)\nLuminosity : %f Solar luminosity\n", ((float)NS.getTemperature()), NS.getRadius()*SUN_RADIUS_AU, NS.getRadius(), NS.getLuminosity());
+    printf("Temperature : %.0f K\nRadius : %.5f AU (%.3f sun percent)\nLuminosity : %.3f Solar luminosity\n", ((float)NS.getTemperature()), NS.getRadius()*SUN_RADIUS_AU, NS.getRadius(), NS.getLuminosity());
     if(NS.getDensity() >= 0 && NS.getDensity() < 10000000)
         printf("Mass : %.3f solar mass, Density : %.3f g/cm^3\n", NS.getMass(), NS.getDensity());
     else
@@ -376,7 +376,7 @@ void DisplayDoubleStar(Star DoubleStarCenter, bool DispPlanetCharac)
 
 
 
-float getStarLuminosity(int StarType, int StarClass)    //correction Ã  donner
+float getStarLuminosity(int StarType, int StarClass)    //correction à donner
 {   //get some random luminosity
     if(StarType == D)
     {

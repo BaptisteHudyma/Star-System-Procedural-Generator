@@ -1,6 +1,3 @@
-//All the class used in the project and some small functions that goes with them
-
-
 #include <string>
 #include <iostream>
 #include <vector>
@@ -9,7 +6,7 @@
 #include <math.h>
 #include <limits.h>
 
-#define OUTER_LIMIT_COEFF 60.0  //the outter limit of this solar system ( This coeff * Mass of the star )
+#define OUTER_LIMIT_COEFF 60.0
 
 #ifndef CLASSES_H_INCLUDED
 #define CLASSES_H_INCLUDED
@@ -22,17 +19,17 @@ int RandomInt(int, int);
 class Planet{
 private :
     int PlanetType; //0 rocky, 1 gaze, 2 gas giant
-    string Type;    //rocky, gaz, gaz giant, .....
+    string Type;    //rocky, gaz, gaz giant;
 
     //orbital
-    float SemiMajor;    //semimajor axis
+    float SemiMajor;  //semimajor axis
     float Apoapsis;     //farther position to sun
     float Periabsis;    //closer position to sun
     float Velocity;     //orbital velocity
 
-    float Oinclination; //usually -2Â° <-> 2Â° for planets
-    float LoAN;         //Longitude of the Ascending Node
-    float AoP;          //Argument of Periapsis
+    float Oinclination; //-2° <-> 2° for planets
+    float LoAN; //Longitude of the Ascending Node
+    float AoP;  //Argument of Periapsis
 
     //Physical (express in earth values)
     float Mass;
@@ -51,25 +48,25 @@ private :
 
 
 public :
-    int Habitable;          //0 too close to sun, 1 in habitable, 2 out of habitable, variable actually not inmportant since we check the temperature more than the position
-    float *Composition;     //5 principal elements -> 0 : iron, 1 : MgSi, 2 : Water, 3 : Hydrogen, 4 : Helium
-    float OrbitalPeriod;    //time it takse to rotate around the star once
-    float HillSphere;       //hill sphere limit, in AU (maximal satellite zone)
-    float Albedo;           //planet reflectivity (change over time and region but this is a global inacurate albedo)
-    float GreenHouse;       //the amount of Kelvin produced by Greenhouse effect
+    int Habitable;  //0 too close to sun, 1 in habitable, 2 out of habitable
+    float *Composition;   //5 elements -> 0 : iron, 1 : MgSi, 2 : Water, 3 : Hydrogen, 4 : Helium
+    float OrbitalPeriod;    //time to rotate around the sun once
+    float HillSphere;       //hill sphere limit, in AU
+    float Albedo;           //planet reflectivity (changeover time)
+    float GreenHouse;
 
-    float eccentricity;     //orbit eccentricity
+    float eccentricity;
 
-    unsigned int PlanetSeed;    //not used now but will dictate global planet organisation
+    unsigned int PlanetSeed;
 
     int MajorMoonNumber;
     int MinorMoonNumber;
 
-    float Temp;                 //global temperature
+    float Temp;
 
     bool RingSystem;    //true : ring system, false no ring system
 
-    float RocheLimit;   //minimal distance to a stellar body for a satellite hold together by tensile strength (ex asteroid)
+    float RocheLimit;   //minimal distance for a satellite hold together by tensile strength
     Planet()
     {
         MajorMoons = vector<Planet>();
@@ -92,7 +89,7 @@ public :
             Type = "Gas giant";
             break;
         default:
-            printf("\n%d planetary type is not defined\n", TypeS);
+            printf("\n%d planetary type is not define\n", TypeS);
             exit(-5);
             break;
         }
@@ -124,31 +121,26 @@ public :
 
     float getMinTemperature(float StarLum)
     {
-        if(Temp != 0)
-            return Temp;
-        return pow(StarLum*(1-Albedo)/pow(Apoapsis , 2.0) , 1.0/4.0) * 263.0 + GreenHouse;
+        minTemp = pow(StarLum*(1-Albedo)/pow(Apoapsis , 2.0) , 1.0/4.0) * 263.0 + GreenHouse;
+        return minTemp;
     };
     float getMaxTemperature(float StarLum)
     {
-        if(Temp != 0)
-            return Temp;
-        return pow(StarLum*(1-Albedo)/pow(Periabsis , 2.0) , 1.0/4.0) * 263.0 + GreenHouse;
+        maxTemp = pow(StarLum*(1-Albedo)/pow(Periabsis , 2.0) , 1.0/4.0) * 263.0 + GreenHouse;
+        return maxTemp;
     };
 
     float getHillSphereLimit(float PrimaryMass)
     {
-        return HillSphere = (float)SemiMajor * (1-eccentricity) * pow( ( ((float)Mass)/332946.0487) / (3*PrimaryMass) , 1.0/3.0 );
+        return HillSphere = (float)SemiMajor * (1 - eccentricity) * pow( ( ((float)Mass)/332946.0487) / (3 * PrimaryMass) , 1.0/3.0 );
     };
     int getPlanetType() {return PlanetType;};
-    float getEscapeVelocity() { return sqrt(Gravity*Radius)*11.2; };    //in km/s
-    float getOrbitalDistance() {return SemiMajor;};
+    float getEscapeVelocity() { return sqrt(Gravity * Radius) * 11.2; };    //in km/s
+    float getOrbitalDistance() { return SemiMajor; };
     void DisplayPlanet(float StarMass);
     string getType() {return Type;};
     float getMass() {return Mass;};
 };
-
-
-
 
 
 class AsteroidBelt{
@@ -175,24 +167,17 @@ public:
 };
 
 
-
-
-
-
-class Star{     //All values are usually dependant of the sun or in Astronomical Units (AU)
+class Star{
     private :
         unsigned int Temperature;
         char Type;              //O, B, A, ....
         string Class;             //0, I, II, III, ...
         int LuminosityClass;    //0-9
         int ColorSpectrum;      //in Nm
-    
-        //in AU
-        float FrostZone;        
+        float FrostZone;
         float HabitableInferieur;
         float HabitableSuperieur;
         float RocheLimit;
-    
         vector<Planet> System;
         vector<AsteroidBelt> AstBelt;
 
@@ -204,11 +189,10 @@ class Star{     //All values are usually dependant of the sun or in Astronomical
         float Mass;
 
 
-        int ClassInt;   //0 to 5
-        int TypeInt;    //0 to 8
+        int ClassInt;
+        int TypeInt;
 
     public :
-        //in AU
         float OrbitalRadius;    //if it's a multiple star system this value is not 0
         float eccentricity;
         float SemiMajor;
@@ -270,16 +254,16 @@ class Star{     //All values are usually dependant of the sun or in Astronomical
         float getDensity() {return Density;};
 
         float getOuterLimit(){
-            if(OuterEdge<=0)
+            if(OuterEdge <= 0)
                 OuterEdge = Mass*OUTER_LIMIT_COEFF;
-            if(OuterEdge > 601)         //601 AU is extremely big, big enought i can say, but be free to change
+            if(OuterEdge > 601)
                 OuterEdge = 601;
             return OuterEdge;
         }
         float getRocheLimit(){
             if(RocheLimit <= 0)
             {
-                if(Mass <= 1 || Luminosity <= 1)        //curves approximations
+                if(Mass <= 1 || Luminosity <= 1)
                     RocheLimit = 0.1*Mass;
                 else
                     RocheLimit = 0.1*sqrt((float)Luminosity);

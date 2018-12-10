@@ -1,6 +1,3 @@
-//The bigger function used for the setting of planets in the planet class
-
-
 #include "Classes.h"
 #include "PlanetFunctions.h"
 #include <stdio.h>
@@ -25,7 +22,7 @@ float CompositionCoeff [10][2] = {  //constants to calculate mass radius approxi
 };
 
 float ProbaRockyCompos[3][10] = {   //probability of composition apparition of rocky planets
-  //Iron              Rock   Water | Hydrogen
+  //F                   R          W  H
    {2, 10, 17, 22, 22, 17,  8,  1, 0, 0},
    {1, 11, 15, 30, 15,  7,  9,  7, 5, 0},
    {0,  4, 11, 14, 15, 17, 17, 13, 9, 0}
@@ -176,6 +173,10 @@ void Planet::SetRockyPlanetPhysical(float StarLum, float StarMass)
         {
             Albedo = 0.85;  //rock, all water is gone
             GreenHouse = 400;
+
+            //TODO : correct radius and mass change
+            Radius *= (1 - ( Composition[2] / 100)) + 0.1;
+
             Type = "Terrestrial venus type world     ";
             Composition[0] += Composition[2]/2.0;
             Composition[1] += Composition[2]/2.0;
@@ -191,8 +192,6 @@ void Planet::SetRockyPlanetPhysical(float StarLum, float StarMass)
 
     minTemp = getMinTemperature(StarLum);
     maxTemp = getMaxTemperature(StarLum);
-
-
     if(getHillSphereLimit(StarMass) < 0.005)
     {   //hill sphere very narrow
         MajorMoonNumber = 0;
@@ -201,8 +200,8 @@ void Planet::SetRockyPlanetPhysical(float StarLum, float StarMass)
     }
     else
     {   //enough space for moons
-        MajorMoonNumber = RandomInt(-1, (int)(Radius+0.7)-1)+1;
-        MinorMoonNumber = RandomInt(-1, (int)(Mass+0.3)+2)+1;
+        MajorMoonNumber = RandomInt( -1, (int)(Radius + 0.7) - 1)  + 1;
+        MinorMoonNumber = RandomInt( -1, (int)(Mass + 0.3) + 2)    + 1;
         for(int i=0; i<MajorMoonNumber; i++)
         {
             Planet Moon;
@@ -216,6 +215,8 @@ void Planet::SetRockyPlanetPhysical(float StarLum, float StarMass)
             MinorMoons.push_back(Moon);
         }
     }
+
+
     RingSystem = false;
 };
 
@@ -236,7 +237,7 @@ void Planet::SetGasPlanetPhysical(float StarLum, float StarMass)
     minTemp = getMinTemperature(StarLum);
     maxTemp = getMaxTemperature(StarLum);
 
-
+    Composition = CompositionByType[9];
     if(getHillSphereLimit(StarMass) < 0.005)
     {
         MajorMoonNumber = 0;
@@ -245,8 +246,8 @@ void Planet::SetGasPlanetPhysical(float StarLum, float StarMass)
     }
     else
     {
-        MajorMoonNumber = RandomInt(1, (int)(Radius + 0.7)+1);
-        MinorMoonNumber = RandomInt(3, (int)(  Mass + 0.3)+1);
+        MajorMoonNumber = RandomInt(1, (int)(Radius/1.7 + 0.7)+1);
+        MinorMoonNumber = RandomInt(3, (int)(  Mass/100 + 0.3)+1);
         for(int i=0; i<MajorMoonNumber; i++)
         {
             Planet Moon;
@@ -270,6 +271,7 @@ void Planet::SetGasGiantPhysical(float StarLum, float StarMass)
     Albedo = 0.340;
 
     getHillSphereLimit(StarMass);
+
     if(Mass < 4131) //gas giant upper limit
     {
         if(Mass >= 317.2)   // >= jupiter mass --> electron degeneracy prevent the diameter to increase more
@@ -319,15 +321,21 @@ void Planet::SetGasGiantPhysical(float StarLum, float StarMass)
     }
     else
     {
-        MajorMoonNumber = RandomInt(1, (int)(Radius)+1) + 1;
-        MinorMoonNumber = RandomInt(1 , (int)(Mass/75 + 0.3) + 1);
-        for(int i=0; i<MajorMoonNumber; i++)
+        MajorMoonNumber = RandomInt(1, (int)(Radius/1.7) + 1) + 1;
+
+        if( (Mass/100 + 0.3) + 1 < 6 )
+            MinorMoonNumber = RandomInt(5 , 9);
+        else
+            MinorMoonNumber = RandomInt(6 ,(int)(Mass/100 + 0.3) + 1);
+
+
+        for(int i = 0; i < MajorMoonNumber; i++)
         {
             Planet Moon;
-
             MajorMoons.push_back(Moon);
         }
-        for(int i=0; i<MinorMoonNumber; i++)
+
+        for(int i = 0; i < MinorMoonNumber; i++)
         {
             Planet Moon;
 
@@ -343,7 +351,7 @@ void Planet::SetGasGiantPhysical(float StarLum, float StarMass)
 void Planet::setOrbitalValues(float InnerLimit, float OuterLimit, float StarMass)
 {   //set planet orbit values
         do {
-            eccentricity = RandomFloat(0.0, 0.210);
+            eccentricity = RandomFloat(0.0, 0.078);
             Periabsis = SemiMajor * (1-eccentricity);
             Apoapsis  = SemiMajor * (1+eccentricity);
         } while(Periabsis < InnerLimit || Apoapsis > OuterLimit);
@@ -382,17 +390,26 @@ void Planet::DisplayPlanet(float StarMass)
 
 
     printf("\n%d major moons, %d minor moon", MajorMoonNumber, MinorMoonNumber);
-    printf("\nOF : %.2f days (%.2f years), %f AU  hill sphere\nTmin = %.2f degres / Tmax = %.2f degres", OrbitalPeriod*EARTH_YEAR, OrbitalPeriod, getHillSphereLimit(StarMass), minTemp - 273.15, maxTemp - 273.15);
-
+    printf("\nOF : %.2f days (%.2f years), %.4f AU  hill sphere\nTemp: %d degres <----> %d degres", OrbitalPeriod*EARTH_YEAR, OrbitalPeriod, getHillSphereLimit(StarMass), (int) (minTemp - 273.15) , (int) (maxTemp - 273.15));
+    //printf("\norbit %.3f AU <----> %.3f AU\n", Periabsis, Apoapsis);
     printf("\nseed : %d", PlanetSeed);
-    if(eccentricity <= 0.2 && minTemp > -20.5+273.15 && maxTemp < 55+273.15)
+    if(eccentricity <= 0.2 && minTemp > -20.5 + 273.15 && maxTemp < 55 + 273.15)
     {
         if(PlanetType != 0)
             printf("\n\nPOSSIBLE HABITABLE MOON YOUHOUUUUU\n");
         else
-            printf("\n\nPOSSIBLE HABITABLE YOUHOUUUUU\n");
+        {
+            if( minTemp > 5 + 273.15 && maxTemp < 20 + 273.15 && Gravity > 0.7 && Gravity < 1.3 )
+                printf("\n\nHABITABLE Earth clone\n");
+            else if(Gravity < 2 && Gravity > 0.4)
+                printf("\n\nHmmmmmmm potential colony\n");
+            else if( Gravity >=  2)
+                printf("\n\nHmmmmmmm survivable but gravity too strong\n");
+            else if( Gravity <=  0.4)
+                printf("\n\nHmmmmmmm survivable but gravity too low\n");
+        }
     }
-    cout << "\n\n" << endl; 
+    cout << "\n\n" << endl;
 }
 
 

@@ -1,6 +1,3 @@
-//planet creation file
-//all the planet creation and display functions
-
 #include <iostream>
 #include <stdio.h>
 #include <string>
@@ -76,7 +73,7 @@ vector<Planet> CreatePlacePlanetsOnSSMeth2(Star ThisStar, int MaxPlanetNumber)
     if(ThisStar.getMass() <= 0)
         return StarSystem;
 
-    float DistFirstPlan = ThisStar.getRocheLimit() + RandomFloat(0.1, 0.5);
+    float DistFirstPlan = ThisStar.getRocheLimit() + RandomFloat(0.10, 0.5);
     if(DistFirstPlan > ThisStar.getOuterLimit() || DistFirstPlan==0)
         return StarSystem;
 
@@ -150,7 +147,7 @@ vector<Planet> CreatePlacePlanetsOnSSMeth4(Star ThisStar, int MaxPlanetNumber)
         RefValues1[i] += RandomFloat(0.091, 0.095);*/
 
     float RefValues2[16];
-    for(int i=0; i<16; i++)
+    for(int i = 0; i < 16; i++)
     {
         if(i<8)
             RefValues2[i] = RefValues1[i] + RandomFloat(0.091, 0.095);
@@ -199,7 +196,6 @@ void PopulatePlanets(Star *NS)
     //cout << MaxPlanets << " " << ((int)(15+NS->getMass()*10.0)) << endl;
     int GenerationMethod = RandomInt(1,10);
 
-
     if(GenerationMethod <= 5)   //choose a generation system
         NS->setSystem(CreatePlacePlanetsOnSSMeth1(*NS, RandomInt(0,MaxPlanets)) );
     else if(GenerationMethod <= 7)
@@ -209,9 +205,8 @@ void PopulatePlanets(Star *NS)
     else
         NS->setSystem(CreatePlacePlanetsOnSSMeth4(*NS, RandomInt(0,MaxPlanets)) );
 
-    //printf("\n%d planets created\n", NS.getSystem().size());
+    //printf("\n%d planets created\n", NS->getSystem().size());
     setPlanets(NS);   //set all planets orbits characteristics
-
 
     NS->setAsteroidBelt(PlaceAsteroidBelts(*NS)); //place asteroid belts
 }
@@ -228,7 +223,7 @@ void DisplaySystemsCaracteristics(Star ThisStar)
 
     int AstBelt = 0;
     if(ABelts.size()>0)
-        AstBelt=ABelts.size();
+        AstBelt = ABelts.size();
 
     printf("\n-------Inner  limit-------      %.3f AU", ThisStar.getRocheLimit());
     for(unsigned int i=0; i<SSystem.size(); i++)
@@ -316,17 +311,17 @@ int GasOrRock(float OrbitalRadius, float FrostZ)
 {
     if(OrbitalRadius > FrostZ)
     {   //probably gas
-        if(RandomInt(0,30)==1)
-            return 0;
+        if(RandomInt(0,30) <= 4)
+            return 0;   //gas
         else
-            return 1;
+            return 1;   //rock
     }
     else
-    {
-        if(RandomInt(0,50)==1)
-            return 1;
+    {   //probably rocky
+        if(RandomInt(0,50) <= 1)
+            return 1;   //rock
         else
-            return 0;
+            return 0;   //gas
     }
 }
 
@@ -354,8 +349,8 @@ void OrderPlanetsByDistance(vector<Planet> *StarSystem)
 void DisplayAsteroidBelt(AsteroidBelt ABelt)
 {
   printf("\n\n--------------------------    -  %.3f AU", ABelt.getInnerEdge());
-    printf("\n . Â°   o   ,    '     q  ,    |");
-    printf("\n    `        .    Â°    .      |  %.3f AU width", ABelt.getWidth());
+    printf("\n . °   o   ,    '     q  ,    |");
+    printf("\n    `        .    °    .      |  %.3f AU width", ABelt.getWidth());
     printf("\n .    '   O     '             |");
     printf("\n--------------------------    -  %.3f AU\n", ABelt.getOuterEdge());
 }

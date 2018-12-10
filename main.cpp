@@ -11,6 +11,12 @@
 #include "PlanetFunctions.h"
 
 
+/*1: 27.9657  kPa O2  = Breathable oxygen.
+�2: 13.98285 kPa O2  = Below allowed O2 pressure (16 kPa) and very close to hypoxia (13.3 kPa). Humans won't survive much time.
+�3: 55.9314  kPa O2  = Above allowed O2 pressure (50 kPa), oxygen is toxic. Humans won't suvive much time.
+�4: 139.8285 kPa O2  = Above allowed O2 pressure (50 kPa), oxygen is highly toxic. Human will die in some minutes (an hour?).*/
+
+
 using namespace std;
 
 enum {O0, I, II, III, IV, V};
@@ -18,7 +24,9 @@ enum {O, B, A, F, G, K, M, D, INDETERMINE};
 
 unsigned int InputSeed();
 
-//11321 crash
+//11321 crash   //repaired
+//87731 crash   //repaired
+//109171 crash  //repaired
 
 //28004 Supergiant
 //17111 Hypergiant
@@ -27,9 +35,29 @@ unsigned int InputSeed();
 
 //26527 Double giant habitable
 //6984  Habitable moon 700
+//33606 Class O
+//542   close double habited
+//657   distant double habited
+//7255  Extended double system
+//70434 Big system
+//87288 Habitable moon
+//108356 Habitable puffy giant
+//109928 6 jupiterian
+
+//TODO : correct crossing orbits
+
 
 int main(){
-    unsigned int Seed = InputSeed(); srand(Seed);
+    //unsigned int Seed = InputSeed(); srand(Seed);
+    unsigned int Seed = time(NULL)%120000;
+    /*srand(Seed);
+    Seed = rand()%150;
+    for(unsigned int i=0; i<Seed; i++)
+        rand();
+
+    Seed = rand()%20000;*/
+    srand(Seed);
+    //srand(1047);  //lot of crossing orbits
     //srand(27817);
 
 
@@ -37,30 +65,37 @@ int main(){
     //srand(27198); //11185     //54432
     //srand(8854);         //(32210);   //17053
     //80808;
-    //876 <--> 906 special stars
+    //876 <--> 906 spe
 
     //srand(17026); //204444    //20437
     //srand(6898);
 
     Star NS;
+    cout << "choosing" << endl;
     int multipleStars = RandomInt(0, 20);
 
-    if(multipleStars <= 3)  //  prob 4/21 (reality is ~1/5)
+    //multipleStars = 2;
+
+    if(multipleStars <= 3)
     {
+        cout << "Multiple star system being created..." << endl;
         CreateMultipleStarSystem(&NS);
-        DisplayDoubleStar(NS, false);   //put the value to true and every planet characteristics get display
+        cout << "Multiple system created\nDisplaying..." << endl;
+        DisplayDoubleStar(NS, true);   //true displays  every planet characteristics
     }
-    else    //simple star system
+    else
     {
-        CreateStar(&NS);        //create a star
-        PopulatePlanets(&NS);   //add planets to a star
+        cout << "Simple star system being creatd" << endl;
+        CreateStar(&NS);
+        PopulatePlanets(&NS);
+        cout << "Simple system created\nDisplaying..." << endl;
         DisplayStarCarac(NS);
 
         cout << "\n\n" << endl;
         vector<Planet> ThisSystem = NS.getSystem();
         DisplaySystemsCaracteristics(NS);   //display the system
         cout << "\n" << endl;
-        if(false)          //put the value tu true and every planet characteristics get display
+        if(true)          //put the value tu true and every planet characteristics get display
             for(unsigned int i = 0; i<ThisSystem.size(); i++)
                 ThisSystem[i].DisplayPlanet(NS.getMass());
     }
@@ -71,7 +106,7 @@ int main(){
     NS.getAsteroidBelt().clear();
     NS.getSystem().clear();
 
-    printf("Seed : %u\n", Rand);
+    printf("Seed : %u\n", Seed);
     //system("PAUSE");
 
     return 0;
@@ -98,9 +133,7 @@ unsigned int InputSeed()
 }
 
 
-/*  //will be used to get a precise RGB color of the star from which wavelength it radiates
-    //not my function
-
+/*
 int* waveLengthToRGB(double Wavelength){
     double factor;
     double Red,Green,Blue;
