@@ -33,7 +33,7 @@ int main(){
     //srand(27817);
 
 
-    printf("Seed : %u\n", Rand);
+    printf("Seed : %u\n", Seed);
     //srand(27198); //11185     //54432
     //srand(8854);         //(32210);   //17053
     //80808;
