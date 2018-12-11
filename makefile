@@ -4,7 +4,7 @@ all: galaxy
 galaxy: main.o PlanetCreationReferenceFunctions.o PlanetFunctions.o StarFunctions.o
 	$(CC) -o galaxy main.o PlanetCreationReferenceFunctions.o PlanetFunctions.o StarFunctions.o
 
-main.o : main.cpp StarFunctions.h PlanetFunctions.h
+main.o : main.cpp StarFunctions.h PlanetFunctions.h Classes.h
 	$(CC) -c main.cpp
 
 PlanetCreationReferenceFunctions.o : PlanetCreationReferenceFunctions.cpp PlanetFunctions.h

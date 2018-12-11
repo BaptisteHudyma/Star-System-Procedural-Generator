@@ -18,6 +18,7 @@ vector<Planet> CreatePlacePlanetsOnSSMeth1(Star ThisStar, int MaxPlanetNumber)
         return StarSystem;
 
     float DistOfMostMassiveGas = ThisStar.getFrostZone() + RandomFloat(0.1, 1.0);
+    
     if(DistOfMostMassiveGas <= ThisStar.getRocheLimit() || DistOfMostMassiveGas >= ThisStar.getOuterLimit())
         return StarSystem;
 
@@ -26,7 +27,7 @@ vector<Planet> CreatePlacePlanetsOnSSMeth1(Star ThisStar, int MaxPlanetNumber)
     GazGiant.setOrbitalRadius(DistOfMostMassiveGas);
     GazGiant.setPlanetType(2);
     StarSystem.push_back(GazGiant);
-
+    
     //before frost line
     float DistFromStar = DistOfMostMassiveGas;
     while(MaxPlanetNumber > 0)
@@ -60,7 +61,7 @@ vector<Planet> CreatePlacePlanetsOnSSMeth1(Star ThisStar, int MaxPlanetNumber)
         NewPlan.setOrbitalRadius(DistFromStar);
         StarSystem.push_back(NewPlan);
     }
-
+    
     OrderPlanetsByDistance(&StarSystem);
     return StarSystem;
 }
@@ -191,11 +192,12 @@ void PopulatePlanets(Star *NS)
 {   //populate planets for the star NS
 
     //TODO : CORRECT PLANET PROPABILITY
-
+    
     int MaxPlanets = (int) (NS->getOuterLimit()*2) %((int)(15+NS->getMass()*10.0));
-    //cout << MaxPlanets << " " << ((int)(15+NS->getMass()*10.0)) << endl;
+    cout << MaxPlanets << " " << ((int)(15+NS->getMass()*10.0)) << endl;
+    
     int GenerationMethod = RandomInt(1,10);
-
+    
     if(GenerationMethod <= 5)   //choose a generation system
         NS->setSystem(CreatePlacePlanetsOnSSMeth1(*NS, RandomInt(0,MaxPlanets)) );
     else if(GenerationMethod <= 7)
@@ -205,7 +207,8 @@ void PopulatePlanets(Star *NS)
     else
         NS->setSystem(CreatePlacePlanetsOnSSMeth4(*NS, RandomInt(0,MaxPlanets)) );
 
-    //printf("\n%d planets created\n", NS->getSystem().size());
+    
+    printf("\n%d planets created\n", NS->getSystem().size());
     setPlanets(NS);   //set all planets orbits characteristics
 
     NS->setAsteroidBelt(PlaceAsteroidBelts(*NS)); //place asteroid belts
@@ -328,22 +331,20 @@ int GasOrRock(float OrbitalRadius, float FrostZ)
 
 void OrderPlanetsByDistance(vector<Planet> *StarSystem)
 {
-    if(StarSystem->size() == 0)
+    if(StarSystem->size() <= 0)
         return;
-
     Planet *NewArray = new Planet[StarSystem->size()];
     int systemSize = StarSystem->size();
-
+    
     for(int i=0; i<systemSize; i++)
         NewArray[i] = (*StarSystem)[i];
+    
     StarSystem->clear();
-
+    
     sortPlanet(NewArray, systemSize);
 
     for(int i=0; i<systemSize; i++)
         StarSystem->push_back(NewArray[i]);
-
-    delete NewArray;
 }
 
 void DisplayAsteroidBelt(AsteroidBelt ABelt)

@@ -9,7 +9,7 @@
 
 #include "StarFunctions.h"
 #include "PlanetFunctions.h"
-
+#include "Classes.h"
 
 /*1: 27.9657  kPa O2  = Breathable oxygen.
 �2: 13.98285 kPa O2  = Below allowed O2 pressure (16 kPa) and very close to hypoxia (13.3 kPa). Humans won't survive much time.
@@ -24,6 +24,7 @@ enum {O, B, A, F, G, K, M, D, INDETERMINE};
 
 unsigned int InputSeed();
 
+//wtf multi star brown dwarf etc 148
 //11321 crash   //repaired
 //87731 crash   //repaired
 //109171 crash  //repaired
@@ -34,7 +35,7 @@ unsigned int InputSeed();
 //19011 Hypergiant
 
 //26527 Double giant habitable
-//6984  Habitable moon 700
+//6984  Habitable moon 700  118501
 //33606 Class O
 //542   close double habited
 //657   distant double habited
@@ -50,6 +51,7 @@ unsigned int InputSeed();
 int main(){
     //unsigned int Seed = InputSeed(); srand(Seed);
     unsigned int Seed = time(NULL)%120000;
+    
     /*srand(Seed);
     Seed = rand()%150;
     for(unsigned int i=0; i<Seed; i++)
@@ -70,7 +72,7 @@ int main(){
     //srand(17026); //204444    //20437
     //srand(6898);
 
-    Star NS;
+    Star NS = Star();
     cout << "choosing" << endl;
     int multipleStars = RandomInt(0, 20);
 
@@ -79,7 +81,7 @@ int main(){
     if(multipleStars <= 3)
     {
         cout << "Multiple star system being created..." << endl;
-        CreateMultipleStarSystem(&NS);
+        CreateMultipleStarSystem(&NS); 
         cout << "Multiple system created\nDisplaying..." << endl;
         DisplayDoubleStar(NS, true);   //true displays  every planet characteristics
     }
@@ -87,6 +89,7 @@ int main(){
     {
         cout << "Simple star system being creatd" << endl;
         CreateStar(&NS);
+        cout << "Star created" << endl;
         PopulatePlanets(&NS);
         cout << "Simple system created\nDisplaying..." << endl;
         DisplayStarCarac(NS);
@@ -100,8 +103,6 @@ int main(){
                 ThisSystem[i].DisplayPlanet(NS.getMass());
     }
     cout << "\n\n" << endl;
-    //printf("\nBeginning planetary implementation");
-
 
     NS.getAsteroidBelt().clear();
     NS.getSystem().clear();
