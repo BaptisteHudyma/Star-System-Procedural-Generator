@@ -16,5 +16,8 @@ PlanetFunctions.o : PlanetFunctions.cpp PlanetFunctions.h StarFunctions.h
 StarFunctions.o : StarFunctions.cpp PlanetFunctions.h StarFunctions.h
 	$(CC) -c StarFunctions.cpp
 
-clean :
-	rm −f ∗˜ ∗ . o
+clean:
+	rm −rf *.o
+
+mrproper: clean
+	rm -rf galaxy
