@@ -17,7 +17,7 @@ StarFunctions.o : StarFunctions.cpp PlanetFunctions.h StarFunctions.h
 	$(CC) -c StarFunctions.cpp
 
 clean:
-	rm −rf *.o
+	rm -rf *.o ~*
 
-mrproper: clean
+rmproper: clean
 	rm -rf galaxy
