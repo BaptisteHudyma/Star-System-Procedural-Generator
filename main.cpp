@@ -1,123 +1,164 @@
 #include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string>
-#include <map>
-#include <time.h>
-
 #include <limits.h>
 
-#include "StarFunctions.h"
-#include "PlanetFunctions.h"
-#include "Classes.h"
-
-#define DISPLAY_PLANETS_CARAC true		//put the value to true and every planet characteristics get display
-#define DISPLAY_START_CARS true   		//true displays  every planet characteristics
-
-/*1: 27.9657  kPa O2  = Breathable oxygen.
-  �2: 13.98285 kPa O2  = Below allowed O2 pressure (16 kPa) and very close to hypoxia (13.3 kPa). Humans won't survive much time.
-  �3: 55.9314  kPa O2  = Above allowed O2 pressure (50 kPa), oxygen is toxic. Humans won't suvive much time.
-  �4: 139.8285 kPa O2  = Above allowed O2 pressure (50 kPa), oxygen is highly toxic. Human will die in some minutes (an hour?).*/
-
-
-using namespace std;
-
-enum {O0, I, II, III, IV, V};
-enum {O, B, A, F, G, K, M, D, INDETERMINE};
+#include "system.h"
 
 unsigned int InputSeed ();
 
-//wtf multi star brown dwarf etc 148
-//11321 crash   //repaired
-//87731 crash   //repaired
-//109171 crash  //repaired
+int main(int argc, char ** argv) {
 
-//28004 Supergiant
-//17111 Hypergiant
-//close binary hypergiant 26218 (too close)
-//19011 Hypergiant
+    //unsigned int seed = InputSeed ();
+    //System_Generator sg(seed);
+    //sg.show();
 
-//26527 Double giant habitable
-//6984  Habitable moon 700  118501
-//33606 Class O
-//542   close double habited
-//657   distant double habited
-//7255  Extended double system
-//70434 Big system
-//87288 Habitable moon
-//108356 Habitable puffy giant
-//109928 6 jupiterian
+    for(unsigned int i = 100; i < 200; i++) {
+        System_Generator *sg = new System_Generator(i);
+        sg->show();
+        std::cout << std::endl;
 
-//14369 outer limit in inner limit
+        delete sg;
+    }
 
-//TODO : tidal locking -> system age
-//TODO : atmosphere
-//TODO : better moon generation
-
-//TODO : correct crossing orbits
-//5403 broken habitable zone WATAFUCK
+    auto rg = Random_Generator(2);
 
 
-int main () {
-	unsigned int Seed = time (NULL)%120000;
+    int count[50] = {};
+    for (unsigned int i=0; i < 1000000; i+=1)
+    {
+        //double t = rg.get_composed_gaussian(0.5, 0.2);
+        double t = rg.gaussian(0.5, 0.2) * 50.0;
+        if (t < 0 or t >= 50)
+            continue;
 
-	srand (Seed);
-	//srand(1047);  //lot of crossing orbits
+        count[(int)t] += 1;
+    }
+    int maxCount = 0;
+    for (unsigned int i = 0; i < 50; i++) {
+        if (count[i] > maxCount) {
+            maxCount = count[i];
+        }
+    }
 
-	printf ("Seed : %u\n", Seed);
-	//876 <--> 906 spe
+    std::cout << maxCount << std::endl;
+    double a = 50.0/maxCount;
+    for (unsigned int i = 0; i < 50; i++) {
+        //std::cout << count[i] << std::endl;
+        std::cout << i/50.0 << ": "  << std::string(count[i] * a, '*') << std::endl;
+    }
 
-	Star NS = Star ();
-	int multipleStars = RandomInt (0, 20);
-
-	//multipleStars = 2;
-
-	if (multipleStars <= 3)
-	{
-		CreateMultipleStarSystem (&NS); 
-		DisplayDoubleStar (NS, DISPLAY_START_CARS);
-	}
-	else
-	{
-		CreateStar (&NS);
-		PopulatePlanets (&NS);
-		DisplayStarCarac (NS);
-
-		cout << "\n\n" << endl;
-		vector<Planet> ThisSystem = NS.getSystem ();
-		DisplaySystemsCaracteristics (NS);	   //display the system
-		cout << "\n" << endl;
-		if (DISPLAY_PLANETS_CARAC)
-			for (unsigned int i = 0; i < ThisSystem.size (); i++)
-				ThisSystem[i].DisplayPlanet (NS.getMass ());
-	}
-	cout << "\n\n" << endl;
-
-	NS.getAsteroidBelt ().clear ();
-	NS.getSystem ().clear ();
-
-	printf ("Seed : %u\n", Seed);
-	return 0;
+    return 0;
 }
+
+
+
+
+
+//#define DISPLAY_PLANETS_CARAC true		//put the value to true and every planet characteristics get display
+//#define DISPLAY_START_CARS true   		//true displays  every planet characteristics
+//
+///*1: 27.9657  kPa O2  = Breathable oxygen.
+//  �2: 13.98285 kPa O2  = Below allowed O2 pressure (16 kPa) and very close to hypoxia (13.3 kPa). Humans won't survive much time.
+//  �3: 55.9314  kPa O2  = Above allowed O2 pressure (50 kPa), oxygen is toxic. Humans won't suvive much time.
+//  �4: 139.8285 kPa O2  = Above allowed O2 pressure (50 kPa), oxygen is highly toxic. Human will die in some minutes (an hour?).*/
+//
+//
+//using namespace std;
+//
+//enum {O0, I, II, III, IV, V};
+//enum {O, B, A, F, G, K, M, D, INDETERMINE};
+//
+//
+////wtf multi star brown dwarf etc 148
+////11321 crash   //repaired
+////87731 crash   //repaired
+////109171 crash  //repaired
+//
+////28004 Supergiant
+////17111 Hypergiant
+////close binary hypergiant 26218 (too close)
+////19011 Hypergiant
+//
+////26527 Double giant habitable
+////6984  Habitable moon 700  118501
+////33606 Class O
+////542   close double habited
+////657   distant double habited
+////7255  Extended double system
+////70434 Big system
+////87288 Habitable moon
+////108356 Habitable puffy giant
+////109928 6 jupiterian
+//
+////14369 outer limit in inner limit
+//
+////TODO : tidal locking -> system age
+////TODO : atmosphere
+////TODO : better moon generation
+//
+////TODO : correct crossing orbits
+////5403 broken habitable zone WATAFUCK
+//
+//
+//int main () {
+//	unsigned int Seed = time (NULL)%120000;
+//
+//	srand (Seed);
+//	//srand(1047);  //lot of crossing orbits
+//
+//	printf ("Seed : %u\n", Seed);
+//	//876 <--> 906 spe
+//
+//	Star NS = Star ();
+//	int multipleStars = RandomInt (0, 20);
+//
+//	//multipleStars = 2;
+//
+//	if (multipleStars <= 3)
+//	{
+//		CreateMultipleStarSystem (&NS); 
+//		DisplayDoubleStar (NS, DISPLAY_START_CARS);
+//	}
+//	else
+//	{
+//		CreateStar (&NS);
+//		PopulatePlanets (&NS);
+//		DisplayStarCarac (NS);
+//
+//		cout << "\n\n" << endl;
+//		vector<Planet> ThisSystem = NS.getSystem ();
+//		DisplaySystemsCaracteristics (NS);	   //display the system
+//		cout << "\n" << endl;
+//		if (DISPLAY_PLANETS_CARAC)
+//			for (unsigned int i = 0; i < ThisSystem.size (); i++)
+//				ThisSystem[i].DisplayPlanet (NS.getMass ());
+//	}
+//	cout << "\n\n" << endl;
+//
+//	NS.getAsteroidBelt ().clear ();
+//	NS.getSystem ().clear ();
+//
+//	printf ("Seed : %u\n", Seed);
+//	return 0;
+//}
 
 
 unsigned int InputSeed ()
 {   //ask user to input a seed
-	unsigned int Seed = 0;
+    unsigned int Seed = 0;
 
-	while (1) {
-		printf ("\nEnter Seed INT (positive) : ");
-		scanf ("%u", &Seed);
+    while (1) {
+        std::cout << "\nEnter Seed INT (positive) : ";
+        scanf ("%u", &Seed);
 
-		if ((cin) && (Seed >= 0) && (Seed <= INT_MAX))
-			break;
+        if ((std::cin) && (Seed >= 0) && (Seed <= INT_MAX))
+            break;
 
-		cin.clear ();
-		cin.ignore (1000, '\n');
-		printf ("Seed invalid, program terminated\n");
-		exit (-1);
-	}
-	return Seed;
+        std::cin.clear ();
+        std::cin.ignore (1000, '\n');
+        std::cout << "Seed invalid, program terminated\n" << std::endl;
+        exit (-1);
+    }
+    return Seed;
 }
 
 
