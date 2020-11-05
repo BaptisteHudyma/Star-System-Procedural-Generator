@@ -35,7 +35,7 @@ A few theorical areas are displayed:
 - System Outer limit: Theorical limit after which no planet will orbit (Physically not really relevant)
 
 
-### The System detailled view
+### The System detailed view
 
 ![System details](./images/systemDetails.png)
 
